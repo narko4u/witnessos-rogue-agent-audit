@@ -105,11 +105,11 @@ def _finding_to_audit_finding(detector_name: str, finding) -> AuditFinding | Non
 class RogueAgentScanner:
     """Main scanner: runs all detectors and aggregates findings."""
 
-    def __init__(self, target: str = "localhost", timeout: int = 30):
+    def __init__(self, target: str = "localhost", timeout: int = 30, insecure: bool = False):
         self.target = target
         self.timeout = timeout
         self.detectors: list[BaseDetector] = [
-            HTTPEndpointDetector(target=target),
+            HTTPEndpointDetector(target=target, insecure=insecure),
             ProcessMonitorDetector(),
             NetworkAnalyzerDetector(),
             EnvironmentCheckDetector(),

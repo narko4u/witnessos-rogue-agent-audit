@@ -2,6 +2,7 @@
 """CLI entry point: python -m audit [options]"""
 
 import argparse
+import os
 import sys
 from audit.scanner import RogueAgentScanner
 from audit.reporters.json_reporter import JSONReporter
@@ -27,10 +28,11 @@ Examples:
     parser.add_argument("--timeout", type=int, default=30, help="Per-detector timeout in seconds (default: 30)")
     parser.add_argument("--quick", "-q", action="store_true", help="Quick scan — fewer probes, shorter timeout")
     parser.add_argument("--version", "-v", action="version", version="Rogue Agent Audit 0.1.0")
+    parser.add_argument("--insecure", action="store_true", help="Disable SSL certificate verification (not recommended)")
     args = parser.parse_args()
 
     timeout = 10 if args.quick else args.timeout
-    scanner = RogueAgentScanner(target=args.target, timeout=timeout)
+    scanner = RogueAgentScanner(target=args.target, timeout=timeout, insecure=args.insecure)
     
     print(f"Scanning {args.target} for rogue agents...")
     report = scanner.scan_sync()
@@ -47,9 +49,10 @@ Examples:
     output = reporter.generate(report)
 
     if args.output:
-        with open(args.output, "w") as f:
+        output_path = os.path.abspath(args.output)
+        with open(output_path, "w") as f:
             f.write(output)
-        print(f"Report written to {args.output}")
+        print(f"Report written to {output_path}")
     else:
         print(output)
 

@@ -52,8 +52,9 @@ class HTTPEndpointDetector(BaseDetector):
     name = "http_endpoint"
     description = "Scans for AI agent HTTP API endpoints on common ports"
 
-    def __init__(self, target: str = "localhost", rule_file: str | None = None) -> None:
+    def __init__(self, target: str = "localhost", rule_file: str | None = None, insecure: bool = False) -> None:
         self.target = target
+        self.insecure = insecure
         self._endpoints: list[dict[str, Any]] = []
         self._ports: list[int] = list(COMMON_PORTS)
         if rule_file:
@@ -76,7 +77,7 @@ class HTTPEndpointDetector(BaseDetector):
     async def detect(self) -> list[Finding]:
         """Probe endpoints and return findings."""
         findings: list[Finding] = []
-        client = httpx.AsyncClient(timeout=3.0, verify=False)
+        client = httpx.AsyncClient(timeout=3.0, verify=not self.insecure)
 
         try:
             for port in self._ports:
