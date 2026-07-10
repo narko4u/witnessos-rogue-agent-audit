@@ -1,0 +1,133 @@
+# Known AI Agent Detection Patterns
+# Used by the Rogue Agent Audit tool to identify common agent frameworks and platforms
+# in an environment.
+
+version: "1.0"
+last_updated: "2026-07-10"
+
+patterns:
+  # API Endpoints
+  - type: api_endpoint
+    name: OpenAI API
+    patterns:
+      - "/v1/chat/completions"
+      - "/v1/assistants"
+      - "/v1/threads"
+    default_port: 443
+    risk: medium
+    description: "Detection of OpenAI API endpoint access, indicating LLM-powered agent activity"
+
+  - type: api_endpoint
+    name: Anthropic API
+    patterns:
+      - "/v1/messages"
+      - "/v1/complete"
+    default_port: 443
+    risk: medium
+    description: "Detection of Anthropic Claude API access"
+
+  - type: api_endpoint
+    name: Local Language Model
+    patterns:
+      - "/v1/completions"
+      - "/v1/chat/completions"
+      - "/generate"
+      - "/api/generate"
+    default_port: 8000
+    alternate_ports: [8080, 11434, 5000, 7860]
+    risk: medium
+    description: "Local LLM inference endpoint — may indicate self-hosted agent infrastructure"
+
+  - type: api_endpoint
+    name: Agent Framework Endpoint
+    patterns:
+      - "/agent"
+      - "/agents"
+      - "/api/agent"
+      - "/api/agents"
+      - "/execute"
+      - "/run"
+    default_port: 8000
+    alternate_ports: [8080, 3000, 5000]
+    risk: high
+    description: "Generic agent framework endpoint — potential ungoverned agent activity"
+
+  # Process Names
+  - type: process
+    name: LangChain Agent
+    patterns:
+      - "langchain"
+      - "langgraph"
+      - "lcagent"
+    risk: medium
+    description: "LangChain framework process — may indicate agent deployment"
+
+  - type: process
+    name: CrewAI Agent
+    patterns:
+      - "crewai"
+      - "crew"
+      - "agent"
+    risk: medium
+    description: "CrewAI multi-agent framework process"
+
+  - type: process
+    name: AutoGPT Agent
+    patterns:
+      - "autogpt"
+      - "agent"
+      - "agpt"
+    risk: high
+    description: "AutoGPT autonomous agent process"
+
+  - type: process
+    name: Generic Agent Runner
+    patterns:
+      - "agent"
+      - "bot"
+      - "automation"
+      - "workflow"
+    risk: info
+    description: "Generic process with agent-like naming — requires investigation"
+
+  # Environment Variables
+  - type: environment_variable
+    name: OpenAI Configuration
+    patterns:
+      - "OPENAI_API_KEY"
+      - "OPENAI_ORG_ID"
+      - "OPENAI_BASE_URL"
+    risk: medium
+    description: "OpenAI API credentials present — indicates agent capability"
+
+  - type: environment_variable
+    name: Anthropic Configuration
+    patterns:
+      - "ANTHROPIC_API_KEY"
+      - "ANTHROPIC_BASE_URL"
+    risk: medium
+    description: "Anthropic API credentials present — indicates agent capability"
+
+  - type: environment_variable
+    name: Agent Framework Configuration
+    patterns:
+      - "LANGCHAIN_API_KEY"
+      - "LANGCHAIN_TRACING_V2"
+      - "AGENT_CONFIG"
+      - "AGENT_DIR"
+      - "AGENT_WORKSPACE"
+    risk: high
+    description: "Agent framework configuration detected — likely active agent deployment"
+
+  # Ports
+  - type: port
+    name: Common Agent Ports
+    patterns: [8000, 8080, 11434, 5000, 3000, 7860, 9090]
+    risk: low
+    description: "Common ports used by agent frameworks and LLM inference servers"
+
+  - type: port
+    name: Monitoring/Observability
+    patterns: [4318, 4317, 9090, 16686]
+    risk: info
+    description: "Observability ports that may indicate agent telemetry"

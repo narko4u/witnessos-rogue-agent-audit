@@ -1,0 +1,86 @@
+# Suspicious AI Agent Behaviour Patterns
+# These patterns indicate potentially ungoverned or malicious agent activity.
+
+version: "1.0"
+last_updated: "2026-07-10"
+
+behaviors:
+  - id: bhv-001
+    name: Unauthenticated API Access
+    severity: critical
+    description: "Agent accessing API endpoints without authentication headers or tokens"
+    indicators:
+      - "HTTP 401/403 responses being ignored"
+      - "Public API endpoints accessed without API keys"
+      - "Authentication-bypass attempts"
+    recommendation: "Ensure all agents use authenticated endpoints. Review API gateway logs."
+
+  - id: bhv-002
+    name: Excessive Rate of Actions
+    severity: high
+    description: "Agent performing actions at a rate far exceeding human or configured limits"
+    indicators:
+      - ">100 API calls per minute from a single agent"
+      - "Back-to-back write operations without read intervals"
+      - "Bulk data creation or modification"
+    recommendation: "Implement rate limiting per agent. Set action quotas per agent identity."
+
+  - id: bhv-003
+    name: Out-of-Hours Operation
+    severity: medium
+    description: "Agent activity occurring outside defined operating hours or schedules"
+    indicators:
+      - "API calls during 00:00-06:00 local time"
+      - "Weekend activity when business rules restrict it"
+      - "Activity during maintenance windows"
+    recommendation: "Define agent operating schedules. Flag out-of-hours actions for review."
+
+  - id: bhv-004
+    name: Unusual Data Access Pattern
+    severity: critical
+    description: "Agent accessing data outside its defined scope or role"
+    indicators:
+      - "Accessing database tables unrelated to agent purpose"
+      - "Reading files outside designated workspace"
+      - "Accessing other users' or tenants' data"
+    recommendation: "Implement least-privilege data access. Audit agent data access patterns."
+
+  - id: bhv-005
+    name: External Data Exfiltration
+    severity: critical
+    description: "Agent sending data to external endpoints outside the organisation"
+    indicators:
+      - "Outbound connections to unknown IP addresses"
+      - "Data being posted to non-organisation API endpoints"
+      - "Large data volumes transferred to external services"
+    recommendation: "Implement egress filtering. Monitor agent outbound connections."
+
+  - id: bhv-006
+    name: Credential or Secret Exposure
+    severity: critical
+    description: "Agent logging, caching, or transmitting credentials or secrets"
+    indicators:
+      - "API keys appearing in agent logs"
+      - "Credentials in agent stdout or debug output"
+      - "Token transmission in URL parameters instead of headers"
+    recommendation: "Use secrets management. Never pass credentials to agent context."
+
+  - id: bhv-007
+    name: Self-Modification or Escalation
+    severity: critical
+    description: "Agent attempting to modify its own permissions, configuration, or code"
+    indicators:
+      - "Agent modifying its system prompt or instructions"
+      - "Agent attempting privilege escalation"
+      - "Agent disabling its own monitoring or logging"
+    recommendation: "Implement immutable agent configurations. Monitor for privilege changes."
+
+  - id: bhv-008
+    name: Agent-to-Agent Collusion
+    severity: high
+    description: "Multiple agents communicating outside approved channels or chains"
+    indicators:
+      - "Direct agent-to-agent API calls bypassing orchestration layer"
+      - "Shared memory or state accessed by multiple agents without coordination"
+      - "Circular delegation between agents"
+    recommendation: "Enforce single orchestration path. Audit agent communication channels."
