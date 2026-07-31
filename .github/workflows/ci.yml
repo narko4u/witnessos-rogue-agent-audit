@@ -30,7 +30,7 @@ jobs:
       - name: Bandit scan
         run: bandit -r . -f json || true
       - name: Secrets scan
-        uses: trufflesecurity/trufflehog@v3
+        uses: trufflesecurity/trufflehog@v3.96.0
         with:
           path: ./
           base: ${{ github.event.repository.default_branch }}
