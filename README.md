@@ -1,5 +1,7 @@
 # 🔍 Rogue Agent Audit
 
+[![OpenSSF Best Practices - Baseline 1](https://www.bestpractices.dev/projects/14140/badge)](https://www.bestpractices.dev/projects/14140)
+
 **Audit your environment for ungoverned, unregistered, or misbehaving AI agents.**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
