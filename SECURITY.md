@@ -1,62 +1,58 @@
-# Security Policy
+# Security
 
-## Supported Versions
+## Reporting vulnerabilities
 
-We currently support the latest release with security patches. Older versions may receive patches on a case-by-case basis.
+**Do not open a public issue.** Email [contact@empirelabs.com.au](mailto:contact@empirelabs.com.au) with:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 0.1.x   | ✅ Active support  |
+- A description of the vulnerability
+- Steps to reproduce
+- Affected versions
+- Any proposed fix (optional)
 
-## Reporting a Vulnerability
+We aim to acknowledge reports within 48 hours and provide a timeline for resolution within 5 business days.
 
-We take security vulnerabilities seriously. If you discover a security issue in Rogue Agent Audit, please follow our responsible disclosure process:
+## Scope
 
-### How to Report
+Security issues in **this repository only**. For issues in other Empire Labs projects, report them in the affected project's own repository.
 
-**Do NOT open a public GitHub issue.** Instead, send an email to our security team at **security@nousresearch.com** with the following information:
+## Design principles
 
-1. **Subject line**: `[Rogue Agent Audit Security] Brief description of the issue`
-2. **Description**: What the vulnerability is, where it occurs, and potential impact
-3. **Reproduction steps**: Clear, minimal steps to reproduce the issue
-4. **Affected versions**: Which versions are affected
-5. **Potential fix**: (Optional) Any ideas for how to remediate
-6. **Your contact**: How we can follow up with you
+Empire Labs projects follow a security-first posture:
 
-### What to Expect
+1. **Least privilege** - CI and tooling run with minimal permissions
+2. **Offline-first where possible** - no unnecessary network calls
+3. **Minimal dependencies** - fewer dependencies means a smaller attack surface
+4. **Tamper-evident** - where applicable, outputs carry cryptographic evidence
 
-- **Acknowledgment**: Within 48 hours, we'll confirm receipt of your report
-- **Assessment**: We'll triage and assess the severity within 5 business days
-- **Fix timeline**: We'll work on a fix and communicate an estimated timeline
-- **Disclosure**: We coordinate public disclosure after a fix is released
+## Supported versions
 
-### Scope
+Security fixes are applied to the latest release. Older releases are patched on a best-effort basis for critical issues only.
 
-This security policy covers:
-- The Python package (`rogue-agent-audit`) and its source code
-- The YAML rule files in `rules/`
-- Official releases published to PyPI
+## Disclosure policy
 
-Out of scope:
-- Third-party dependencies (report issues to their maintainers)
-- User environments where the tool is run (we only audit; we don't govern)
+We follow coordinated disclosure:
 
-## Security Best Practices for Users
+1. Reporter contacts us privately (email above)
+2. We acknowledge within 48 hours
+3. We work on a fix and timeline
+4. We publish a fix, then coordinate public disclosure with the reporter
 
-1. **Run audits in isolated environments** — The scanner probes running processes and network connections. In sensitive environments, run from a dedicated audit machine.
-2. **Review reports locally** — Audit reports may contain sensitive information (e.g., process names, environment variable names). Handle reports with appropriate confidentiality.
-3. **Pin dependencies** — Use `pip install rogue-agent-audit==0.1.0` or pin versions in your requirements files to avoid unexpected changes.
-4. **Audit regularly** — Run Rogue Agent Audit on a schedule (daily or weekly) to catch newly deployed ungoverned agents.
+## Threat model
 
-## Security-Related Configuration
+See the repository documentation (THREAT-ASSESSMENT.md) for the threat model and trust boundaries applicable to this project.
 
-The tool itself does not collect telemetry, send data externally, or require network access to function. By default, it only probes:
-- The local machine (process table, environment variables)
-- Ports on the specified target (default: localhost)
-- DNS resolution for known AI API endpoints
+## End of life
 
-No data is transmitted off the machine unless you explicitly configure it to output to a network path.
+A release is considered end of life once it has been superseded by a newer release. Superseded releases no longer receive security updates except critical-only best-effort patches.
 
-## Thanks
+## Secrets and credentials
 
-Thank you for helping keep Rogue Agent Audit and the broader AI ecosystem safe.
+- Secrets (API keys, tokens, passwords, private keys) must never be committed to this repository. CI and local development use environment-provided credentials only.
+- Repository secrets are stored in GitHub encrypted secrets and are scoped to the workflows that need them.
+- If a secret is exposed, rotate it immediately, remove it from repository history, and report the exposure to contact@empirelabs.com.au.
+
+## Dependency and static-analysis remediation policy
+
+- Software Composition Analysis (SCA): known-vulnerable dependencies are remediated before any release. Critical and high severity findings are remediated within 30 days; medium within 90 days.
+- Static Application Security Testing (SAST): findings are triaged on the same severity thresholds (critical/high within 30 days, medium within 90 days). Findings that cannot be fixed are documented with a justification.
+- No release is cut while critical or high severity SCA or SAST findings are unresolved.
