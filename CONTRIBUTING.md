@@ -103,3 +103,8 @@ pip install -e ".[dev]"
 ## Questions?
 
 Open a [GitHub Issue](https://github.com/narko4u/witnessos-rogue-agent-audit/issues) for questions, feature requests, or discussion.
+
+## Developer Certificate of Origin
+
+Every commit must carry a `Signed-off-by` trailer (use `git commit -s`). The
+CI `dco` job enforces this on every pull request.
