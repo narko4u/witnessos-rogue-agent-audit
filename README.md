@@ -188,5 +188,5 @@ are published on the GitHub release page. To verify integrity and authorship:
    repository's `release.yml` workflow):
 
    ```
-   cosign verify-blob --certificate <asset>.pem --signature <asset>.sig --certificate-identity "https://github.com/narko4u/witnessos-rogue-agent-audit/.github/workflows/release.yml@refs/tags/v*" --certificate-oidc-issuer "https://token.actions.githubusercontent.com" <asset>
+   cosign verify-blob --certificate <asset>.pem --signature <asset>.sig --certificate-identity-regexp "^https://github.com/narko4u/witnessos-rogue-agent-audit/.github/workflows/release.yml@refs/tags/v.*" --certificate-oidc-issuer "https://token.actions.githubusercontent.com" <asset>
    ```
